@@ -3,5 +3,5 @@ then
     mkdir src
 fi
 
-rm -rf ./src/*
+rm -rf ./src/node-token
 vagrant up
