@@ -27,31 +27,8 @@ Vagrant.configure("2") do |config|
     curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--node-ip 192.168.56.110" sh -
     SHELL
 
-    host1.vm.provision "copy-k3s-token", after: "start-k3s-server", type: "shell", inline:<<-SHELL
-    while [ ! -f /var/lib/rancher/k3s/server/node-token ] ;
-    do
-          sleep 2
-    done
 
-    sh -c "echo -n $(cat /var/lib/rancher/k3s/server/node-token) > /vagrant/node-token"
-    SHELL
 
-    host1.vm.provision "add-host", after: "start-k3s-server", type: "shell", inline:<<-SHELL
-    echo "192.168.56.111 ppoinsinSW ppoinsinSW" >> /etc/hosts
-    SHELL
-  end
-
-  config.vm.define "ppoinsinSW" do |host2|
-    host2.vm.hostname = "ppoinsinSW"
-    host2.vm.network "private_network", ip: "192.168.56.111"
-
-    host2.vm.provision "add-host", type: "shell", inline:<<-SHELL
-    echo "192.168.56.110 ppoinsinS ppoinsinS" >> /etc/hosts
-    SHELL
-
-    host2.vm.provision "start-k3s", after: "add-host", type: "shell", inline:<<-SHELL
-    curl -sfL https://get.k3s.io | K3S_URL="https://ppoinsinS:6443" K3S_TOKEN=$(cat /vagrant/node-token) INSTALL_K3S_EXEC="--node-ip 192.168.56.111" sh -
-    SHELL
   end
 
 
