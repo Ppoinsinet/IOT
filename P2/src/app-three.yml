@@ -1,0 +1,41 @@
+# APP THREE
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-three
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 30003
+  selector:
+    app: app-three
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-three
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-three
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: app-three
+    spec:
+      containers:
+      - image: paulbouwer/hello-kubernetes:1.7
+        name: hello-kubernetes
+        ports:
+        - containerPort: 80
+          name: web
+        env:
+        - name: MESSAGE
+          value: Hello from app3.
+        - name: PORT
+          value: "80"
