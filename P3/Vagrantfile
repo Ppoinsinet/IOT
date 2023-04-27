@@ -46,24 +46,7 @@ Vagrant.configure("2") do |config|
 
     # resource : https://tanzu.vmware.com/developer/guides/argocd-gs/
 
-    # install argocd CLI
-    curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
-    install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
-    rm argocd-linux-amd64
-
-    k3d cluster create my-cluster # --api-port 6443 -p 8080:80@loadbalancer --agents 2
-
-    kubectl create namespace argocd
-    kubectl create namespace dev
-
-    kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-
-    # Makes the password 'password'
-    kubectl -n argocd patch secret argocd-secret \
-    -p '{"stringData": {
-      "admin.password": "$2a$10$rRyBsGSHK6.uc8fntPwVIuLVHgsAhAX7TcdrqW/RADU0uh7CaChLa",
-      "admin.passwordMtime": "'$(date +%FT%T%Z)'"
-    }}'
+    sh /vagrant/install.sh
 
     # Creating app
 

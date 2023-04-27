@@ -14,7 +14,7 @@ install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
 rm argocd-linux-amd64
 
 # create k3d cluster
-k3d cluster create my-cluster # --api-port 6443 -p 8080:80@loadbalancer --agents 2
+k3d cluster create my-cluster --api-port 6443 -p 8080:80@loadbalancer --agents 2
 
 # create namespaces
 kubectl create namespace argocd
@@ -23,6 +23,8 @@ kubectl create namespace dev
 # add argocd manifest
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
+kubectl wait pod --all --for=condition=Ready --namespace=argocd --timeout=300s
+
 # change argocd password to 'password'
 kubectl -n argocd patch secret argocd-secret \
     -p '{"stringData": {
@@ -30,6 +32,11 @@ kubectl -n argocd patch secret argocd-secret \
       "admin.passwordMtime": "'$(date +%FT%T%Z)'"
     }}'
 
+# login to argocd server
+
+# argocd login localhost:
+
+
 # add my app to argocd
-argocd app create ppoinsin-app --repo https://github.com/Ppoinsinet/ppoinsin-badass-config.git --dest-server https://kubernetes.default.svc --dest-namespace dev --path  deploy
-argocd app set ppoinsin-app --sync-policy automated --sync-option ApplyOutOfSyncOnly=true --self-heal
+# argocd app create ppoinsin-app --repo https://github.com/Ppoinsinet/ppoinsin-badass-config.git --dest-server https://kubernetes.default.svc --dest-namespace dev --path  deploy
+# argocd app set ppoinsin-app --sync-policy automated --sync-option ApplyOutOfSyncOnly=true --self-heal
