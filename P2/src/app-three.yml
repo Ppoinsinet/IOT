@@ -4,11 +4,10 @@ kind: Service
 metadata:
   name: app-three
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
   - port: 80
     targetPort: 80
-    nodePort: 30003
   selector:
     app: app-three
 ---

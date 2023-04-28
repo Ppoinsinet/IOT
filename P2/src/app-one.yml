@@ -4,11 +4,10 @@ kind: Service
 metadata:
   name: app-one
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
   - port: 80
     targetPort: 80
-    nodePort: 30001
   selector:
     app: app-one
 ---
