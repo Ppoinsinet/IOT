@@ -14,7 +14,7 @@ install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
 rm argocd-linux-amd64
 
 # create k3d cluster
-k3d cluster create my-cluster --api-port 6443 -p 8888:80@loadbalancer --agents 1
+k3d cluster create my-cluster --api-port 6443 -p 8888:80@loadbalancer -p 30001:30001@agent:0 -p 30002:30002@agent:0 --agents 1
 
 # create namespaces
 kubectl create namespace argocd
