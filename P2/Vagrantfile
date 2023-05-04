@@ -34,6 +34,7 @@ Vagrant.configure("2") do |config|
     do
           sleep 2
     done
+    sleep 2
     SHELL
 
     host1.vm.provision "start-apps", after: "wait-k3s-start", type: "shell", inline:<<-SHELL
