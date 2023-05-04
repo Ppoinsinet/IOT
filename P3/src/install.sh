@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# install docker
+apt-get install -y docker
+service docker start
+
 # install kubectl
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 chmod +x ./kubectl
@@ -32,5 +36,4 @@ kubectl -n argocd patch secret argocd-secret \
       "admin.passwordMtime": "'$(date +%FT%T%Z)'"
     }}'
 
-# For port-forwarding for ArgoCD
-# kubectl port-forward svc/argocd-server -n argocd 8080:443 --address='0.0.0.0'
+kubectl patch svc argocd-server -n argocd --patch-file patch.yaml
